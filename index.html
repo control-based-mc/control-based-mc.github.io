@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supplementary Videos</title>
+<style>
+  :root{
+    --bg: #FFFFFF;
+    --panel: #FFFFFF;
+    --ink: #1C1B19;
+    --ink-soft: #5B5850;
+    --rule: #E4E1D9;
+    --accent: #2E4B4F;      /* muted deep teal — structural / baseline */
+    --accent-ours: #B4552D; /* clay/rust — reserved ONLY for CMC (ours) */
+    --accent-ours-bg: #FBEEE7;
+    --mono-bg: #F1EFE8;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family: "Source Sans 3","Inter",-apple-system,BlinkMacSystemFont,sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3{
+    font-family: "Source Serif 4","Georgia",serif;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  .mono{
+    font-family: "IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+    letter-spacing: -0.01em;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    max-width: 1120px; margin: 0 auto; padding: 72px 28px 40px;
+  }
+  .hero .eyebrow{
+    font-family:"IBM Plex Mono",monospace;
+    font-size: 12px; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 14px;
+  }
+  .hero h1{ font-size: 34px; line-height:1.25; max-width: 720px;}
+  .hero p.lede{
+    margin-top: 16px; font-size: 16.5px; color: var(--ink-soft); max-width: 640px;
+  }
+  /* ---------- Section ---------- */
+  section.block{
+    max-width: 1120px; margin: 0 auto; padding: 46px 28px;
+    border-top: 1px solid var(--rule);
+  }
+  section.block .head{
+    display:flex; align-items:center; gap: 14px; flex-wrap:wrap;
+    margin-bottom: 8px;
+  }
+  section.block .head .tag{
+    font-family:"IBM Plex Mono",monospace; font-size: 12px; color: var(--ink-soft);
+    background: var(--mono-bg); padding: 3px 9px; border-radius: 4px;
+  }
+  section.block h2{ font-size: 22px; }
+  section.block .desc{
+    max-width: 760px; color: var(--ink-soft); font-size: 15px; margin-top: 10px; margin-bottom: 28px;
+  }
+  section.block .desc code{ font-family:"IBM Plex Mono",monospace; font-size: 0.92em; background: var(--mono-bg); padding:1px 5px; border-radius:3px; }
+
+  /* ---------- Comparison row (one prompt/reference, many method videos) ---------- */
+  .row{ margin-bottom: 44px; }
+  .row:last-child{ margin-bottom: 0; }
+  .row-title{
+    font-size: 14.5px; color: var(--ink);
+    margin-bottom: 14px; font-style: italic;
+    font-family:"Source Serif 4",serif;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px;
+  }
+  .cell{
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .cell:hover{ box-shadow: 0 4px 18px rgba(0,0,0,0.06); }
+  .cell.is-ours{
+    border: 1.5px solid var(--accent-ours);
+    box-shadow: 0 2px 14px rgba(180,85,45,0.10);
+  }
+  .cell .media{
+    position:relative; width:100%; aspect-ratio: 4/3; background:#111;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .cell video, .cell img{
+    width:100%; height:100%; object-fit:cover; display:block;
+  }
+  .cell .missing{
+    color:#8a8a86; font-size:12px; font-family:"IBM Plex Mono",monospace;
+    text-align:center; padding: 10px; line-height:1.5;
+  }
+  .cell .label{
+    display:flex; align-items:center; justify-content:center;
+    padding: 8px 10px;
+    font-size: 12.5px;
+    text-align:center;
+  }
+  .cell .label .name{ font-weight:600; }
+  .cell.is-ours .label .name{ color: var(--accent-ours); }
+  .cell .label .pill{
+    font-family:"IBM Plex Mono",monospace; font-size:10.5px;
+    color: var(--ink-soft);
+  }
+  .cell.is-ours .label .pill{ color: var(--accent-ours); font-weight:600; }
+
+  /* ---------- Reference cell + method groups ---------- */
+  .row-reference-wrap{ width: 200px; margin-bottom: 22px; }
+  .method-group{ margin-bottom: 24px; }
+  .method-group:last-child{ margin-bottom: 0; }
+  .method-group-label{
+    font-family:"IBM Plex Mono",monospace; font-size: 12px; color: var(--ink-soft);
+    text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px;
+  }
+  .method-group.is-ours .method-group-label{ color: var(--accent-ours); font-weight:600; }
+  .group-caption{
+    text-align:center; font-size: 13px; color: var(--ink); font-weight:600;
+    margin-top: 12px;
+  }
+  .pair-row{ display:flex; gap: 10px; }
+  .pair-block{ flex: 1 1 0; min-width: 0; }
+  .pair-block .group-caption{ margin-top: 12px; }
+
+  /* ---------- Fixed 6-col grid + per-column prompt caption (More results) ---------- */
+  .grid-fixed-6{ grid-template-columns: repeat(6, minmax(90px, 1fr)); }
+  .cell-caption{
+    font-family:"Source Serif 4",serif; font-style:italic;
+    font-size: 11.5px; line-height:1.4; color: var(--ink-soft);
+    text-align:center; padding: 6px 4px 0; word-break:break-word; overflow-wrap:anywhere;
+  }
+  .cell .cell-caption:last-child{ padding-bottom: 10px; }
+
+  /* ---------- Fig.3 — sequential prompt-switch playback ---------- */
+  .seq{ margin-bottom: 40px; }
+  .seq:last-child{ margin-bottom:0; }
+  .seq-head{
+    display:flex; flex-direction:column; gap: 10px;
+    margin-bottom: 16px;
+  }
+  .seq-head-top{
+    display:flex; align-items:center; justify-content:space-between; gap: 12px;
+  }
+  .seq-label{
+    font-family:"Source Serif 4",serif; font-style:italic; font-size:14.5px; color:var(--ink);
+  }
+  .seq-replay{
+    font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--ink-soft);
+    background:var(--mono-bg); border:1px solid var(--rule); border-radius:5px;
+    padding:5px 10px; cursor:pointer; transition: color .15s ease, border-color .15s ease;
+    flex-shrink:0;
+  }
+  .seq-replay:hover{ color:var(--accent); border-color:var(--accent); }
+  .seq-prompts{
+    display:flex; flex-direction:column; gap: 4px;
+  }
+  .seq-prompt{
+    font-size: 13px; color: var(--ink-soft); line-height:1.5;
+  }
+  .seq-prompt .seq-prompt-tag{
+    font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--ink);
+    font-weight:600; margin-right:7px;
+  }
+
+  .seq-track{
+    display:flex; align-items:flex-start; gap:0;
+    width: 100%; padding: 2px 2px 10px;
+  }
+  .seq-arrow{
+    flex: 0 0 auto; align-self:center;
+    color: var(--rule); font-size:18px; padding: 0 8px; margin-top: -24px;
+  }
+  .seq-card{
+    flex: 1 1 0; width: auto; min-width: 0;
+    border:1px solid var(--rule); border-radius:11px; background:var(--panel);
+    overflow:hidden; opacity: 0.5;
+    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease, opacity .2s ease;
+  }
+  .seq-card.is-baseline{ border-color: var(--ink-soft); }
+  .seq-card.is-active{
+    opacity:1; border-color: var(--accent);
+    box-shadow: 0 3px 16px rgba(46,75,79,0.18);
+    transform: translateY(-3px);
+  }
+  .seq-card.is-done{ opacity: 0.85; }
+  .seq-card.is-outlined{ border-width: 1.5px; }
+  .seq-card.is-outlined.is-active{ border-color: var(--accent); }
+  .seq-card.is-outlined.is-done{ border-color: var(--seq-outline); }
+  .seq-card-media{
+    position:relative; width:100%; aspect-ratio: 3/2; background:#111;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .seq-card-media video{ width:100%; height:100%; object-fit:cover; display:block; }
+  .seq-card-pill{
+    font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:var(--ink-soft);
+    text-transform:uppercase; letter-spacing:0.06em; text-align:center;
+    padding: 9px 6px 0;
+  }
+  .seq-card-name{
+    font-family:"IBM Plex Mono",monospace; font-size:12.5px; text-align:center;
+    color:var(--ink-soft); padding: 5px 6px 11px;
+  }
+  .seq-card.is-active .seq-card-name{ color:var(--accent); font-weight:600; }
+  .seq-card.is-baseline .seq-card-name{ font-weight:600; }
+
+  @media (max-width: 640px){
+    .seq-track{ flex-wrap: wrap; }
+    .seq-arrow{ display:none; }
+    .seq-card{ flex: 1 1 calc(33.333% - 8px); margin: 4px; }
+  }
+
+  /* ---------- Footer note ---------- */
+  footer{
+    max-width: 1120px; margin: 0 auto; padding: 36px 28px 70px;
+    color: var(--ink-soft); font-size: 12.5px; border-top: 1px solid var(--rule);
+  }
+
+  @media (max-width: 640px){
+    .hero h1{ font-size: 26px; }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    .cell{ transition:none; }
+    .seq-card{ transition:none; }
+  }
+
+  /* ---------- Loading overlay ---------- */
+  #loading-overlay{
+    position: fixed; inset: 0; z-index: 999;
+    background: var(--bg);
+    display:flex; align-items:center; justify-content:center;
+    transition: opacity .4s ease;
+  }
+  #loading-overlay.is-hidden{ opacity: 0; pointer-events: none; }
+  .loading-inner{ display:flex; flex-direction:column; align-items:center; gap:16px; }
+  .loading-spinner{
+    width: 34px; height:34px;
+    border: 3px solid var(--rule);
+    border-top-color: var(--accent-ours);
+    border-radius: 50%;
+    animation: loading-spin .8s linear infinite;
+  }
+  @keyframes loading-spin{ to{ transform: rotate(360deg); } }
+  .loading-text{
+    font-family:"IBM Plex Mono",monospace; font-size:12.5px; color: var(--ink-soft);
+    letter-spacing:0.02em;
+  }
+  .loading-text .pct{ color: var(--ink); font-weight:600; }
+
+  @media (prefers-reduced-motion: reduce){
+    .loading-spinner{ animation: none; border-top-color: var(--rule); }
+  }
+</style>
+</head>
+<body>
+
+<div id="loading-overlay">
+  <div class="loading-inner">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Loading videos… <span class="pct" id="loadingPct">0%</span></div>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="eyebrow">Supplementary Videos</div>
+  <h1>Diverse Motion Customization via Control-based Dynamic Optimization</h1>
+</section>
+
+<main id="sections"></main>
+
+<footer>
+  This page contains no author-identifying information and is provided solely as supplementary evidence.
+</footer>
+
+<script>
+const SECTIONS = [
+  {
+    id: "overview",
+    tag: "Fig. 1",
+    title: "Overview",
+    desc: "Our framework mitigates content leakage and faithfully transfers only the desired motion pattern from the reference video, thereby enabling diverse generation across varying samples and prompts.",
+    rows: [
+      {
+        groups: [
+          { items: [
+            { name: "Reference", src: "fig1_overview/ref.mp4" },
+            { name: "❌ Similar Structure", src: "fig1_overview/leakage_1.mp4" },
+            { name: "❌ Similar Color", src: "fig1_overview/leakage_2.mp4" },
+            { name: "❌ Unnatural Appearance", src: "fig1_overview/leakage_3.mp4" },
+          ] },
+          { name: "CMC (Ours)", ours:true, pairs: [
+            { caption: "✅ Diverse Samples", items: [ { src: "fig1_overview/ours_panda_1.mp4" }, { src: "fig1_overview/ours_panda_2.mp4" } ] },
+            { caption: "✅ Diverse Prompts", items: [ { src: "fig1_overview/ours_eagle.mp4" }, { src: "fig1_overview/ours_lion.mp4" } ] },
+          ] },
+        ]
+      },
+    ]
+  },
+  {
+    id: "fig3",
+    tag: "Fig. 3",
+    title: "Motion Formation in Early Diffusion Steps",
+    desc: "We denoise with a first prompt, then switch to a second prompt at a given step and continue to the end.<br>The key is to see <b>how far the second prompt's influence reaches.</b>",
+    rows: [
+      {
+        sequence: {
+          label: "Motion change",
+          outlineColor: "#dc2626",
+          prompt1: "A Golen Retriever <b>running joyfully</b> across a green meadow.",
+          prompt2: "A Golen Retriever <b>sitting peacefully</b> across a green meadow.",
+          steps: [
+            { name: "Switch @ 0<br>(= Prompt 2)", src: "fig3_prompt_switch/motion_change/baseline_prompt2.mp4", outline:true},
+            { name: "Switch @ 5",  src: "fig3_prompt_switch/motion_change/switch_at_step_05.mp4", outline:true},
+            { name: "Switch @ 10", src: "fig3_prompt_switch/motion_change/switch_at_step_10.mp4" },
+            { name: "Switch @ 20", src: "fig3_prompt_switch/motion_change/switch_at_step_20.mp4" },
+            { name: "Switch @ 30", src: "fig3_prompt_switch/motion_change/switch_at_step_30.mp4" },
+            { name: "Switch @ 50<br>(= Prompt 1)", src: "fig3_prompt_switch/motion_change/baseline_prompt1.mp4"},
+          ]
+        }
+      },
+      {
+        sequence: {
+          label: "Subject change",
+          outlineColor: "#2563eb",
+          prompt1: "A <b>Golden Retriever</b> running joyfully across a green meadow.",
+          prompt2: "A <b>White Siberian Tiger</b> running joyfully across a green meadow.",
+          steps: [
+            { name: "Switch @ 0<br>(= Prompt 2)", src: "fig3_prompt_switch/subject_change/baseline_prompt2.mp4", outline:true},
+            { name: "Switch @ 5",  src: "fig3_prompt_switch/subject_change/switch_at_step_05.mp4", outline:true},
+            { name: "Switch @ 10", src: "fig3_prompt_switch/subject_change/switch_at_step_10.mp4", outline:true },
+            { name: "Switch @ 20", src: "fig3_prompt_switch/subject_change/switch_at_step_20.mp4", outline:true },
+            { name: "Switch @ 30", src: "fig3_prompt_switch/subject_change/switch_at_step_30.mp4" },
+            { name: "Switch @ 50<br>(= Prompt 1)", src: "fig3_prompt_switch/subject_change/baseline_prompt1.mp4"},
+          ]
+        }
+      },
+    ]
+  },
+  {
+    id: "qual",
+    tag: "Fig. 5",
+    title: "Qualitative comparison",
+    desc: "We provide qualitative comparison against 4 baselines. We expect the output to follow the reference video along the motion axis, while aligning with the prompt in all other attributes, yielding diverse generations across samples.",
+    rows: [
+      {
+        title: "“A deer eating grass”",
+        items: [
+          { name: "Reference", src: "fig5_comparison/deer/ref.mp4" },
+          { name: "Ours #1", src: "fig5_comparison/deer/ours1.mp4", ours:true },
+          { name: "Ours #2", src: "fig5_comparison/deer/ours2.mp4", ours:true },
+          { name: "Ours #3", src: "fig5_comparison/deer/ours3.mp4", ours:true },
+        ]
+      },
+      {
+        items: [
+          { name: "MotionClone", src: "fig5_comparison/deer/mc.mp4" },
+          { name: "MotionDirector", src: "fig5_comparison/deer/md.mp4" },
+          { name: "DiTFlow", src: "fig5_comparison/deer/ditflow.mp4" },
+          { name: "EffiVMT", src: "fig5_comparison/deer/effivmt.mp4" },
+        ]
+      },
+      {
+        title: "“A tall tree at the high hill”",
+        items: [
+          { name: "Reference", src: "fig5_comparison/tree/ref.mp4" },
+          { name: "Ours #1", src: "fig5_comparison/tree/ours1.mp4", ours:true },
+          { name: "Ours #2", src: "fig5_comparison/tree/ours2.mp4", ours:true },
+          { name: "Ours #3", src: "fig5_comparison/tree/ours3.mp4", ours:true },
+        ]
+      },
+      {
+        items: [
+          { name: "MotionClone", src: "fig5_comparison/tree/mc.mp4" },
+          { name: "MotionDirector", src: "fig5_comparison/tree/md.mp4" },
+          { name: "DiTFlow", src: "fig5_comparison/tree/ditflow.mp4" },
+          { name: "EffiVMT", src: "fig5_comparison/tree/effivmt.mp4" },
+        ]
+      },
+    ]
+  },
+  {
+    id: "comparison",
+    tag: "Appendix",
+    title: "More comparisons",
+    rows: [
+      {
+        title: "“A lion moving its head”",
+        items: [
+          { name: "Reference", src: "appendix/more_comparisons/lion/ref.mp4" },
+          { name: "MotionClone",        src: "appendix/more_comparisons/lion/mc.mp4" },
+          { name: "MotionDirector",        src: "appendix/more_comparisons/lion/md.mp4" },
+          { name: "DiTFlow",   src: "appendix/more_comparisons/lion/ditflow.mp4" },
+          { name: "EffiVMT",   src: "appendix/more_comparisons/lion/effivmt.mp4" },
+          { name: "CMC (Ours)", src: "appendix/more_comparisons/lion/ours.mp4", ours:true },
+        ]
+      },
+      {
+        title: "“A campfire burning”",
+        items: [
+          { name: "Reference", src: "appendix/more_comparisons/campfire/ref.mp4" },
+          { name: "MotionClone",        src: "appendix/more_comparisons/campfire/mc.mp4" },
+          { name: "MotionDirector",        src: "appendix/more_comparisons/campfire/md.mp4" },
+          { name: "DiTFlow",   src: "appendix/more_comparisons/campfire/ditflow.mp4" },
+          { name: "EffiVMT",   src: "appendix/more_comparisons/campfire/effivmt.mp4" },
+          { name: "CMC (Ours)", src: "appendix/more_comparisons/campfire/ours.mp4", ours:true },
+        ]
+      },
+      {
+        title: "“A helicopter flying in the sky”",
+        items: [
+          { name: "Reference", src: "appendix/more_comparisons/helicopter/ref.mp4" },
+          { name: "MotionClone",        src: "appendix/more_comparisons/helicopter/mc.mp4" },
+          { name: "MotionDirector",        src: "appendix/more_comparisons/helicopter/md.mp4" },
+          { name: "DiTFlow",   src: "appendix/more_comparisons/helicopter/ditflow.mp4" },
+          { name: "EffiVMT",   src: "appendix/more_comparisons/helicopter/effivmt.mp4" },
+          { name: "CMC (Ours)", src: "appendix/more_comparisons/helicopter/ours.mp4", ours:true },
+        ]
+      },
+    ]
+  },
+  {
+    id: "more",
+    tag: "Appendix",
+    title: "More results",
+    rows: [
+      {
+        // Each pair = one column: reference on top, CMC (Ours) below it with
+        // its text prompt captioned underneath. Fill in `ref` / `ours` / `prompt`.
+        pairs: [
+          { prompt: "“A dog lying on the floor”", ref: "appendix/more_results/dog_ref.mp4", ours: "appendix/more_results/dog.mp4" },
+          { prompt: "“A fancy car in the garage”", ref: "appendix/more_results/car_ref.mp4", ours: "appendix/more_results/car.mp4" },
+          { prompt: "“A beautiful flower, close-up”", ref: "appendix/more_results/flower_ref.mp4", ours: "appendix/more_results/flower.mp4"},
+          { prompt: "“A fox walking through a forest”", ref: "appendix/more_results/fox_ref.mp4", ours: "appendix/more_results/fox.mp4" },
+          { prompt: "“A subway train approaching station”", ref: "appendix/more_results/subway_ref.mp4", ours: "appendix/more_results/subway.mp4" },
+          { prompt: "“A bear looking ahead”", ref: "appendix/more_results/bear_ref.mp4", ours: "appendix/more_results/bear.mp4"},
+        ]
+      },
+    ]
+  },
+];
+
+/* ============================================================
+   RENDER (no need to edit below this line)
+   ============================================================ */
+const sectionsEl = document.getElementById("sections");
+
+function makeCell(item) {
+  const cell = document.createElement("div");
+  cell.className = "cell" + (item.ours ? " is-ours" : "");
+
+  const media = document.createElement("div");
+  media.className = "media";
+  if (item.src) {
+    const isGif = /\.gif$/i.test(item.src);
+    media.innerHTML = isGif
+      ? `<img src="videos/${item.src}" alt="${item.name || ""}">`
+      : `<video src="videos/${item.src}" muted loop playsinline preload="auto"></video>`;
+  } else {
+    media.innerHTML = `<div class="missing">video<br>pending</div>`;
+  }
+  cell.appendChild(media);
+
+  if (item.caption) {
+    const cap = document.createElement("div");
+    cap.className = "cell-caption";
+    cap.textContent = item.caption;
+    cell.appendChild(cap);
+  }
+
+  if (item.name) {
+    const label = document.createElement("div");
+    label.className = "label";
+    label.innerHTML = `<span class="name">${item.name}</span>`;
+    cell.appendChild(label);
+  }
+  return cell;
+}
+
+function makeSequence(seq) {
+  const wrap = document.createElement("div");
+  wrap.className = "seq";
+  if (seq.outlineColor) {
+    wrap.style.setProperty("--seq-outline", seq.outlineColor);
+  }
+
+  const head = document.createElement("div");
+  head.className = "seq-head";
+
+  const headTop = document.createElement("div");
+  headTop.className = "seq-head-top";
+  const label = document.createElement("span");
+  label.className = "seq-label";
+  label.textContent = seq.label || "";
+  headTop.appendChild(label);
+  const replayBtn = document.createElement("button");
+  replayBtn.className = "seq-replay";
+  replayBtn.type = "button";
+  replayBtn.textContent = "↻ Replay";
+  headTop.appendChild(replayBtn);
+  head.appendChild(headTop);
+
+  if (seq.prompt1 || seq.prompt2) {
+    const prompts = document.createElement("div");
+    prompts.className = "seq-prompts";
+    if (seq.prompt1) {
+      prompts.innerHTML += `<div class="seq-prompt"><span class="seq-prompt-tag">Prompt 1:</span>${seq.prompt1}</div>`;
+    }
+    if (seq.prompt2) {
+      prompts.innerHTML += `<div class="seq-prompt"><span class="seq-prompt-tag">Prompt 2:</span>${seq.prompt2}</div>`;
+    }
+    head.appendChild(prompts);
+  }
+
+  wrap.appendChild(head);
+
+  const track = document.createElement("div");
+  track.className = "seq-track";
+
+  const cards = [];
+  seq.steps.forEach((step, idx) => {
+    if (idx > 0) {
+      const arrow = document.createElement("div");
+      arrow.className = "seq-arrow";
+      arrow.textContent = "→";
+      track.appendChild(arrow);
+    }
+    const videoSrc = `videos/${step.src}`;
+    const posterSrc = videoSrc.replace(/\.mp4$/i, ".jpg");
+    const card = document.createElement("div");
+    card.className = "seq-card is-waiting" + (step.baseline ? " is-baseline" : "") + (step.outline ? " is-outlined" : "");
+    card.innerHTML = `
+      <div class="seq-card-media">
+        <video src="${videoSrc}" poster="${posterSrc}" muted playsinline loop preload="none"></video>
+      </div>
+      ${step.baseline ? `<div class="seq-card-pill">Baseline</div>` : ""}
+      <div class="seq-card-name">${step.name || ""}</div>
+    `;
+    track.appendChild(card);
+    cards.push(card);
+  });
+  wrap.appendChild(track);
+
+  initSequencePlayer(cards, replayBtn);
+  return wrap;
+}
+
+function initSequencePlayer(cards, replayBtn) {
+  const STEP_MS = 2100;
+  const LOOP_PAUSE_MS = 1000;
+  const videos = cards.map(c => c.querySelector("video"));
+  let timer = null;
+
+  function setState(card, state) {
+    card.classList.remove("is-waiting", "is-active", "is-done");
+    card.classList.add(state);
+  }
+
+  function reset() {
+    if (timer) clearTimeout(timer);
+    cards.forEach((c, i) => {
+      setState(c, "is-waiting");
+      videos[i].pause();
+      videos[i].currentTime = 0;
+    });
+  }
+
+  function step(idx) {
+    if (idx > 0) setState(cards[idx - 1], "is-done");
+    if (idx >= cards.length) {
+      timer = setTimeout(() => { reset(); step(0); }, LOOP_PAUSE_MS);
+      return;
+    }
+    setState(cards[idx], "is-active");
+    const v = videos[idx];
+    v.currentTime = 0;
+    v.play();
+    timer = setTimeout(() => step(idx + 1), STEP_MS);
+  }
+
+  function start() {
+    reset();
+    step(0);
+  }
+
+  replayBtn.addEventListener("click", start);
+
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { start(); io.disconnect(); }
+      });
+    }, { threshold: 0.3 });
+    io.observe(cards[0]);
+  } else {
+    start();
+  }
+}
+
+SECTIONS.forEach((sec, i) => {
+  const block = document.createElement("section");
+  block.className = "block";
+  block.id = sec.id;
+
+  block.innerHTML = `
+    <div class="head">
+      <span class="tag">${sec.tag}</span>
+      <h2>${sec.title}</h2>
+    </div>
+    ${sec.desc ? `<div class="desc">${sec.desc}</div>` : ""}
+  `;
+
+  sec.rows.forEach(row => {
+    const rowEl = document.createElement("div");
+    rowEl.className = "row";
+
+    if (row.title) {
+      const rowTitle = document.createElement("div");
+      rowTitle.className = "row-title";
+      rowTitle.textContent = row.title;
+      rowEl.appendChild(rowTitle);
+    }
+
+    if (row.sequence) {
+      rowEl.appendChild(makeSequence(row.sequence));
+    } else if (row.pairs) {
+      // Fixed 6-column grid: reference row on top, CMC (Ours) row below with
+      // a small per-column prompt caption directly under each "ours" video.
+      const refGroup = document.createElement("div");
+      refGroup.className = "method-group";
+      const refLabel = document.createElement("div");
+      refLabel.className = "method-group-label";
+      refLabel.textContent = "Reference";
+      refGroup.appendChild(refLabel);
+      const refGrid = document.createElement("div");
+      refGrid.className = "grid grid-fixed-6";
+      row.pairs.forEach(p => refGrid.appendChild(makeCell({ src: p.ref })));
+      refGroup.appendChild(refGrid);
+      rowEl.appendChild(refGroup);
+
+      const oursGroup = document.createElement("div");
+      oursGroup.className = "method-group is-ours";
+      const oursLabel = document.createElement("div");
+      oursLabel.className = "method-group-label";
+      oursLabel.textContent = "CMC (Ours)";
+      oursGroup.appendChild(oursLabel);
+      const oursGrid = document.createElement("div");
+      oursGrid.className = "grid grid-fixed-6";
+      row.pairs.forEach(p => oursGrid.appendChild(makeCell({ src: p.ours, ours: true })));
+      row.pairs.forEach(p => {
+        const cap = document.createElement("div");
+        cap.className = "cell-caption";
+        cap.textContent = p.prompt || "";
+        oursGrid.appendChild(cap);
+      });
+      oursGroup.appendChild(oursGrid);
+      rowEl.appendChild(oursGroup);
+    } else if (row.groups) {
+      // One reference cell, then stacked method groups of N samples each.
+      if (row.reference) {
+        const refWrap = document.createElement("div");
+        refWrap.className = "row-reference-wrap";
+        refWrap.appendChild(makeCell({ name: "Reference", src: row.reference.src }));
+        rowEl.appendChild(refWrap);
+      }
+
+      row.groups.forEach(group => {
+        const groupEl = document.createElement("div");
+        groupEl.className = "method-group" + (group.ours ? " is-ours" : "");
+
+        if (group.name) {
+          const groupLabel = document.createElement("div");
+          groupLabel.className = "method-group-label";
+          groupLabel.textContent = group.name;
+          groupEl.appendChild(groupLabel);
+        }
+
+        if (group.pairs) {
+          // Sub-blocks within the group, each with its own centered caption
+          // spanning only that pair's cells (e.g. items 1-2 vs items 3-4).
+          const pairRow = document.createElement("div");
+          pairRow.className = "pair-row";
+          group.pairs.forEach(pair => {
+            const pairBlock = document.createElement("div");
+            pairBlock.className = "pair-block";
+
+            const grid = document.createElement("div");
+            grid.className = "grid";
+            pair.items.forEach(item => grid.appendChild(makeCell({ ...item, ours: group.ours })));
+            pairBlock.appendChild(grid);
+
+            if (pair.caption) {
+              const pairCap = document.createElement("div");
+              pairCap.className = "group-caption";
+              pairCap.textContent = pair.caption;
+              pairBlock.appendChild(pairCap);
+            }
+
+            pairRow.appendChild(pairBlock);
+          });
+          groupEl.appendChild(pairRow);
+        } else {
+          const grid = document.createElement("div");
+          grid.className = "grid";
+          group.items.forEach(item => grid.appendChild(makeCell({ ...item, ours: group.ours })));
+          groupEl.appendChild(grid);
+
+          if (group.caption) {
+            const groupCap = document.createElement("div");
+            groupCap.className = "group-caption";
+            groupCap.textContent = group.caption;
+            groupEl.appendChild(groupCap);
+          }
+        }
+
+        rowEl.appendChild(groupEl);
+      });
+    } else {
+      // Flat comparison grid: one row of cells.
+      const grid = document.createElement("div");
+      grid.className = "grid";
+      row.items.forEach(item => grid.appendChild(makeCell(item)));
+      rowEl.appendChild(grid);
+    }
+
+    block.appendChild(rowEl);
+  });
+
+  sectionsEl.appendChild(block);
+});
+
+/* ============================================================
+   GRID VIDEO SYNC
+   Within each comparison row the clips share an identical
+   duration/fps encode. Native `autoplay` starts each <video> the
+   instant *its own* data is ready, so cells drift out of phase
+   with each other depending on individual load timing. Instead we
+   hold every cell video at frame 0 (loading overlay covers the
+   page) until they're all ready, then start them in the same tick
+   so loops start in phase. A timeout keeps slow stragglers from
+   blocking everyone forever.
+   ============================================================ */
+function initGridVideoSync() {
+  const videos = Array.from(document.querySelectorAll(".cell video"));
+  const overlay = document.getElementById("loading-overlay");
+  const pctEl = document.getElementById("loadingPct");
+
+  function hideOverlay() {
+    if (overlay) overlay.classList.add("is-hidden");
+  }
+
+  if (!videos.length) { hideOverlay(); return; }
+
+  let started = false;
+  const total = videos.length;
+  let pending = total;
+
+  function updateProgress() {
+    if (!pctEl) return;
+    const done = total - pending;
+    pctEl.textContent = Math.round((done / total) * 100) + "%";
+  }
+
+  function startAll() {
+    if (started) return;
+    started = true;
+    videos.forEach(v => {
+      try { v.currentTime = 0; } catch (e) {}
+      v.play().catch(() => {});
+    });
+    hideOverlay();
+  }
+
+  function onReady() {
+    pending--;
+    updateProgress();
+    if (pending <= 0) startAll();
+  }
+
+  videos.forEach(v => {
+    if (v.readyState >= 3) { // HAVE_FUTURE_DATA
+      pending--;
+    } else {
+      v.addEventListener("canplaythrough", onReady, { once: true });
+    }
+  });
+  updateProgress();
+  if (pending <= 0) startAll();
+
+  setTimeout(startAll, 4000);
+}
+
+initGridVideoSync();
+</script>
+
+</body>
+</html>
