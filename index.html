@@ -552,7 +552,7 @@ function makeSequence(seq) {
     card.className = "seq-card is-waiting" + (step.baseline ? " is-baseline" : "") + (step.outline ? " is-outlined" : "");
     card.innerHTML = `
       <div class="seq-card-media">
-        <video src="${videoSrc}" poster="${posterSrc}" muted playsinline loop preload="none"></video>
+        <video src="${videoSrc}" poster="${posterSrc}" muted playsinline loop preload="auto"></video>
       </div>
       ${step.baseline ? `<div class="seq-card-pill">Baseline</div>` : ""}
       <div class="seq-card-name">${step.name || ""}</div>
@@ -562,15 +562,14 @@ function makeSequence(seq) {
   });
   wrap.appendChild(track);
 
-  initSequencePlayer(cards, replayBtn);
+  wrap._player = initSequencePlayer(cards, replayBtn);
   return wrap;
 }
 
+// Returns a controller; stepping is driven by initSequenceGroup so that all
+// sequences in one figure share a single clock and stay in lockstep.
 function initSequencePlayer(cards, replayBtn) {
-  const STEP_MS = 2100;
-  const LOOP_PAUSE_MS = 1000;
   const videos = cards.map(c => c.querySelector("video"));
-  let timer = null;
 
   function setState(card, state) {
     card.classList.remove("is-waiting", "is-active", "is-done");
@@ -578,7 +577,6 @@ function initSequencePlayer(cards, replayBtn) {
   }
 
   function reset() {
-    if (timer) clearTimeout(timer);
     cards.forEach((c, i) => {
       setState(c, "is-waiting");
       videos[i].pause();
@@ -587,32 +585,47 @@ function initSequencePlayer(cards, replayBtn) {
   }
 
   function step(idx) {
-    if (idx > 0) setState(cards[idx - 1], "is-done");
-    if (idx >= cards.length) {
-      timer = setTimeout(() => { reset(); step(0); }, LOOP_PAUSE_MS);
-      return;
-    }
+    if (idx > 0 && idx <= cards.length) setState(cards[idx - 1], "is-done");
+    if (idx >= cards.length) return;
     setState(cards[idx], "is-active");
     const v = videos[idx];
     v.currentTime = 0;
-    v.play();
-    timer = setTimeout(() => step(idx + 1), STEP_MS);
+    v.play().catch(() => {});
+  }
+
+  return { reset, step, length: cards.length, replayBtn };
+}
+
+function initSequenceGroup(players, root) {
+  const STEP_MS = 2100;
+  const LOOP_PAUSE_MS = 1000;
+  const length = Math.max(...players.map(p => p.length));
+  let timer = null;
+
+  function tick(idx) {
+    players.forEach(p => p.step(idx));
+    if (idx >= length) {
+      timer = setTimeout(start, LOOP_PAUSE_MS);
+      return;
+    }
+    timer = setTimeout(() => tick(idx + 1), STEP_MS);
   }
 
   function start() {
-    reset();
-    step(0);
+    if (timer) clearTimeout(timer);
+    players.forEach(p => p.reset());
+    tick(0);
   }
 
-  replayBtn.addEventListener("click", start);
+  players.forEach(p => p.replayBtn.addEventListener("click", start));
 
   if ("IntersectionObserver" in window) {
     const io = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) { start(); io.disconnect(); }
       });
-    }, { threshold: 0.3 });
-    io.observe(cards[0]);
+    }, { threshold: 0.1 });
+    io.observe(root);
   } else {
     start();
   }
@@ -631,6 +644,7 @@ SECTIONS.forEach((sec, i) => {
     ${sec.desc ? `<div class="desc">${sec.desc}</div>` : ""}
   `;
 
+  const seqPlayers = [];
   sec.rows.forEach(row => {
     const rowEl = document.createElement("div");
     rowEl.className = "row";
@@ -643,7 +657,9 @@ SECTIONS.forEach((sec, i) => {
     }
 
     if (row.sequence) {
-      rowEl.appendChild(makeSequence(row.sequence));
+      const seqEl = makeSequence(row.sequence);
+      seqPlayers.push(seqEl._player);
+      rowEl.appendChild(seqEl);
     } else if (row.pairs) {
       // Fixed 6-column grid: reference row on top, CMC (Ours) row below with
       // a small per-column prompt caption directly under each "ours" video.
@@ -748,6 +764,7 @@ SECTIONS.forEach((sec, i) => {
   });
 
   sectionsEl.appendChild(block);
+  if (seqPlayers.length) initSequenceGroup(seqPlayers, block);
 });
 
 /* ============================================================
