@@ -71,7 +71,7 @@
   }
   section.block h2{ font-size: 22px; }
   section.block .desc{
-    max-width: 760px; color: var(--ink-soft); font-size: 15px; margin-top: 10px; margin-bottom: 28px;
+    max-width: none; color: var(--ink-soft); font-size: 15px; margin-top: 10px; margin-bottom: 28px;
   }
   section.block .desc code{ font-family:"IBM Plex Mono",monospace; font-size: 0.92em; background: var(--mono-bg); padding:1px 5px; border-radius:3px; }
 
@@ -141,6 +141,51 @@
   .pair-row{ display:flex; gap: 10px; }
   .pair-block{ flex: 1 1 0; min-width: 0; }
   .pair-block .group-caption{ margin-top: 12px; }
+
+  /* ---------- Fig.5 — anchor layout (Reference/Ours column + baseline grid) ---------- */
+  .anchor-grid{
+    display:grid;
+    grid-template-columns: minmax(0,1fr) 1px repeat(4, minmax(0,1fr));
+    gap: 10px;
+    align-items: start;
+  }
+  .anchor-grid .anchor-ref{ grid-column: 1; grid-row: 1; }
+  .anchor-grid .anchor-ours{ grid-column: 1; grid-row: 2; }
+  .anchor-grid .anchor-divider{
+    grid-column: 2; grid-row: 1 / span 2; align-self: stretch;
+    background: var(--rule); margin: 0 2px;
+  }
+  .anchor-grid .anchor-baseline{ grid-column: var(--c); grid-row: var(--r); }
+  @media (max-width: 720px){
+    .anchor-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .anchor-grid .anchor-ref{ grid-column: 1; grid-row: 1; }
+    .anchor-grid .anchor-ours{ grid-column: 2; grid-row: 1; }
+    .anchor-grid .anchor-divider{ grid-column: 1 / -1; grid-row: 2; height: 1px; margin: 4px 0; }
+    .anchor-grid .anchor-baseline{ grid-column: auto; grid-row: auto; }
+  }
+
+  /* ---------- Tiered sample groups (More comparisons) ---------- */
+  .tier{
+    --cols: 6; --gap: 10px;
+    display:flex; flex-wrap:wrap; justify-content:center; gap: var(--gap);
+    margin-bottom: 18px;
+  }
+  .tier:last-child{ margin-bottom: 0; }
+  .tier-group{
+    width: calc(var(--n) * (100% - (var(--cols) - 1) * var(--gap)) / var(--cols) + (var(--n) - 1) * var(--gap));
+  }
+  .tier-cells{
+    display:grid; grid-template-columns: repeat(var(--n), minmax(0,1fr)); gap: var(--gap);
+  }
+  .tier-caption{
+    margin-top: 8px; padding-top: 6px;
+    border-top: 1px solid var(--rule);
+    text-align:center; font-size: 13px; font-weight:600; color: var(--ink);
+  }
+  .tier-group.is-ours .tier-caption{ color: var(--accent-ours); border-top-color: var(--accent-ours); }
+  @media (max-width: 720px){
+    .tier{ --cols: 3; }
+  }
 
   /* ---------- Fixed 6-col grid + per-column prompt caption (More results) ---------- */
   .grid-fixed-6{ grid-template-columns: repeat(6, minmax(90px, 1fr)); }
@@ -361,81 +406,121 @@ const SECTIONS = [
   {
     id: "qual",
     tag: "Fig. 5",
-    title: "Qualitative comparison",
-    desc: "We provide qualitative comparison against 4 baselines. We expect the output to follow the reference video along the motion axis, while aligning with the prompt in all other attributes, yielding diverse generations across samples.",
+    title: "Qualitative Comparison",
+    desc: "We provide qualitative comparison against 7 baselines. We expect the output to follow the reference video along the motion axis, while aligning with the prompt in all other attributes.",
     rows: [
       {
-        title: "“A deer eating grass”",
-        items: [
-          { name: "Reference", src: "fig5_comparison/deer/ref.mp4" },
-          { name: "Ours #1", src: "fig5_comparison/deer/ours1.mp4", ours:true },
-          { name: "Ours #2", src: "fig5_comparison/deer/ours2.mp4", ours:true },
-          { name: "Ours #3", src: "fig5_comparison/deer/ours3.mp4", ours:true },
-        ]
+        // Anchor layout: Reference (top) and CMC (Ours) (bottom) pinned in the
+        // left column, baselines fill a 4-column grid on the right (up to 8).
+        title: "“A panda turning its head”",
+        anchor: {
+          reference: { name: "Reference", src: "fig5_comparison/panda/ref.mp4" },
+          ours:      { name: "CMC (Ours)", src: "fig5_comparison/panda/ours.mp4" },
+          baselines: [
+            { name: "SMM",    src: "fig5_comparison/panda/smm.mp4" },
+            { name: "MOFT", src: "fig5_comparison/panda/moft.mp4" },
+            { name: "MotionClone",        src: "fig5_comparison/panda/mc.mp4" },
+            { name: "DiTFlow",        src: "fig5_comparison/panda/ditflow.mp4" },
+            { name: "MotionDirector",        src: "fig5_comparison/panda/md.mp4"  },
+            { name: "MotionInversion",        src: "fig5_comparison/panda/mi.mp4"  },
+            { name: "DeT",        src: "fig5_comparison/panda/det.mp4"  },
+          ]
+        }
       },
       {
-        items: [
-          { name: "MotionClone", src: "fig5_comparison/deer/mc.mp4" },
-          { name: "MotionDirector", src: "fig5_comparison/deer/md.mp4" },
-          { name: "DiTFlow", src: "fig5_comparison/deer/ditflow.mp4" },
-          { name: "EffiVMT", src: "fig5_comparison/deer/effivmt.mp4" },
-        ]
-      },
-      {
-        title: "“A tall tree at the high hill”",
-        items: [
-          { name: "Reference", src: "fig5_comparison/tree/ref.mp4" },
-          { name: "Ours #1", src: "fig5_comparison/tree/ours1.mp4", ours:true },
-          { name: "Ours #2", src: "fig5_comparison/tree/ours2.mp4", ours:true },
-          { name: "Ours #3", src: "fig5_comparison/tree/ours3.mp4", ours:true },
-        ]
-      },
-      {
-        items: [
-          { name: "MotionClone", src: "fig5_comparison/tree/mc.mp4" },
-          { name: "MotionDirector", src: "fig5_comparison/tree/md.mp4" },
-          { name: "DiTFlow", src: "fig5_comparison/tree/ditflow.mp4" },
-          { name: "EffiVMT", src: "fig5_comparison/tree/effivmt.mp4" },
-        ]
+        title: "“A dog drinking water”",
+        anchor: {
+          reference: { name: "Reference", src: "fig5_comparison/dog/ref.mp4" },
+          ours:      { name: "CMC (Ours)", src: "fig5_comparison/dog/ours.mp4" },
+          baselines: [
+            { name: "SMM",    src: "fig5_comparison/dog/smm.mp4" },
+            { name: "MOFT", src: "fig5_comparison/dog/moft.mp4" },
+            { name: "MotionClone",        src: "fig5_comparison/dog/mc.mp4" },
+            { name: "DiTFlow",        src: "fig5_comparison/dog/ditflow.mp4" },
+            { name: "MotionDirector", src: "fig5_comparison/dog/md.mp4" },
+            { name: "MotionInversion", src: "fig5_comparison/dog/mi.mp4" },
+            { name: "DeT", src: "fig5_comparison/dog/det.mp4" },
+          ]
+        }
       },
     ]
   },
   {
-    id: "comparison",
+    id: "qual-appendix",
     tag: "Appendix",
-    title: "More comparisons",
+    title: "More Qualitative Comparison",
+    desc: "We provide additional qualitative comparison focusing on camera motion.",
     rows: [
       {
-        title: "“A lion moving its head”",
-        items: [
-          { name: "Reference", src: "appendix/more_comparisons/lion/ref.mp4" },
-          { name: "MotionClone",        src: "appendix/more_comparisons/lion/mc.mp4" },
-          { name: "MotionDirector",        src: "appendix/more_comparisons/lion/md.mp4" },
-          { name: "DiTFlow",   src: "appendix/more_comparisons/lion/ditflow.mp4" },
-          { name: "EffiVMT",   src: "appendix/more_comparisons/lion/effivmt.mp4" },
-          { name: "CMC (Ours)", src: "appendix/more_comparisons/lion/ours.mp4", ours:true },
-        ]
+        title: "“A tall tree at the high hill”",
+        anchor: {
+          reference: { name: "Reference", src: "appendix/more_comparison/tree/ref.mp4" },
+          ours:      { name: "CMC (Ours)", src: "appendix/more_comparison/tree/ours.mp4" },
+          baselines: [
+            { name: "SMM", src: "appendix/more_comparison/tree/smm.mp4" },
+            { name: "MOFT", src: "appendix/more_comparison/tree/moft.mp4" },
+            { name: "MotionClone", src: "appendix/more_comparison/tree/mc.mp4" },
+            { name: "DiTFlow", src: "appendix/more_comparison/tree/ditflow.mp4" },
+            { name: "MotionDirector", src: "appendix/more_comparison/tree/md.mp4" },
+            { name: "MotionInversion", src: "appendix/more_comparison/tree/mi.mp4" },
+            { name: "DeT", src: "appendix/more_comparison/tree/det.mp4" },
+          ]
+        }
       },
       {
         title: "“A campfire burning”",
-        items: [
-          { name: "Reference", src: "appendix/more_comparisons/campfire/ref.mp4" },
-          { name: "MotionClone",        src: "appendix/more_comparisons/campfire/mc.mp4" },
-          { name: "MotionDirector",        src: "appendix/more_comparisons/campfire/md.mp4" },
-          { name: "DiTFlow",   src: "appendix/more_comparisons/campfire/ditflow.mp4" },
-          { name: "EffiVMT",   src: "appendix/more_comparisons/campfire/effivmt.mp4" },
-          { name: "CMC (Ours)", src: "appendix/more_comparisons/campfire/ours.mp4", ours:true },
+        anchor: {
+          reference: { name: "Reference", src: "appendix/more_comparison/campfire/ref.mp4" },
+          ours:      { name: "CMC (Ours)", src: "appendix/more_comparison/campfire/ours.mp4" },
+          baselines: [
+            { name: "SMM", src: "appendix/more_comparison/campfire/smm.mp4" },
+            { name: "MOFT", src: "appendix/more_comparison/campfire/moft.mp4" },
+            { name: "MotionClone", src: "appendix/more_comparison/campfire/mc.mp4" },
+            { name: "DiTFlow", src: "appendix/more_comparison/campfire/ditflow.mp4" },
+            { name: "MotionDirector", src: "appendix/more_comparison/campfire/md.mp4" },
+            { name: "MotionInversion", src: "appendix/more_comparison/campfire/mi.mp4" },
+            { name: "DeT", src: "appendix/more_comparison/campfire/det.mp4" },
+          ]
+        }
+      },
+    ]
+  },
+  {
+    id: "diverse",
+    tag: "Appendix",
+    title: "Comparison with tuning-based methods",
+    desc: "CMC produces diverse samples, whereas the baselines generate near-identical samples due to content leakage.",
+    rows: [
+      {
+        // Two centered tiers on a 6-column grid; each group gets one caption
+        // spanning its samples.
+        title: "“A deer eating grass.”",
+        tiers: [
+          [
+            { name: "Reference", items: ["appendix/more_diverse/deer/ref.mp4"] },
+            { name: "CMC (Ours)", ours: true, items: ["appendix/more_diverse/deer/ours1.mp4", "appendix/more_diverse/deer/ours2.mp4", "appendix/more_diverse/deer/ours3.mp4"] },
+          ],
+          [
+            { name: "MotionDirector",  items: ["appendix/more_diverse/deer/md1.mp4", "appendix/more_diverse/deer/md2.mp4"] },
+            { name: "MotionInversion", items: ["appendix/more_diverse/deer/mi1.mp4", "appendix/more_diverse/deer/mi2.mp4"] },
+            { name: "DeT",             items: ["appendix/more_diverse/deer/det1.mp4", "appendix/more_diverse/deer/det2.mp4"] },
+          ],
         ]
       },
       {
-        title: "“A helicopter flying in the sky”",
-        items: [
-          { name: "Reference", src: "appendix/more_comparisons/helicopter/ref.mp4" },
-          { name: "MotionClone",        src: "appendix/more_comparisons/helicopter/mc.mp4" },
-          { name: "MotionDirector",        src: "appendix/more_comparisons/helicopter/md.mp4" },
-          { name: "DiTFlow",   src: "appendix/more_comparisons/helicopter/ditflow.mp4" },
-          { name: "EffiVMT",   src: "appendix/more_comparisons/helicopter/effivmt.mp4" },
-          { name: "CMC (Ours)", src: "appendix/more_comparisons/helicopter/ours.mp4", ours:true },
+        // Two centered tiers on a 6-column grid; each group gets one caption
+        // spanning its samples.
+        title: "“A magnificent mountain.”",
+        tiers: [
+          [
+            { name: "Reference", items: ["appendix/more_diverse/mountain/ref.mp4"] },
+            { name: "CMC (Ours)", ours: true, items: ["appendix/more_diverse/mountain/ours1.mp4", "appendix/more_diverse/mountain/ours2.mp4", "appendix/more_diverse/mountain/ours3.mp4"] },
+          ],
+          [
+            { name: "MotionDirector",  items: ["appendix/more_diverse/mountain/md1.mp4", "appendix/more_diverse/mountain/md2.mp4"] },
+            { name: "MotionInversion", items: ["appendix/more_diverse/mountain/mi1.mp4", "appendix/more_diverse/mountain/mi2.mp4"] },
+            { name: "DeT",             items: ["appendix/more_diverse/mountain/det1.mp4", "appendix/more_diverse/mountain/det2.mp4"] },
+          ],
         ]
       },
     ]
@@ -443,7 +528,7 @@ const SECTIONS = [
   {
     id: "more",
     tag: "Appendix",
-    title: "More results",
+    title: "Gallery",
     rows: [
       {
         // Each pair = one column: reference on top, CMC (Ours) below it with
@@ -660,6 +745,55 @@ SECTIONS.forEach((sec, i) => {
       const seqEl = makeSequence(row.sequence);
       seqPlayers.push(seqEl._player);
       rowEl.appendChild(seqEl);
+    } else if (row.tiers) {
+      // Each tier is a centered row of method groups; every cell is 1/6 of
+      // the row width so cells line up across tiers.
+      row.tiers.forEach(tier => {
+        const tierEl = document.createElement("div");
+        tierEl.className = "tier";
+        tier.forEach(group => {
+          const groupEl = document.createElement("div");
+          groupEl.className = "tier-group" + (group.ours ? " is-ours" : "");
+          groupEl.style.setProperty("--n", group.items.length);
+          const cells = document.createElement("div");
+          cells.className = "tier-cells";
+          group.items.forEach(src => cells.appendChild(makeCell({ src, ours: group.ours })));
+          groupEl.appendChild(cells);
+          const cap = document.createElement("div");
+          cap.className = "tier-caption";
+          cap.textContent = group.name;
+          groupEl.appendChild(cap);
+          tierEl.appendChild(groupEl);
+        });
+        rowEl.appendChild(tierEl);
+      });
+    } else if (row.anchor) {
+      // 5-column grid: col 1 = Reference / Ours, col 2 = divider,
+      // cols 3-6 = baselines laid out row-major, 4 per row.
+      const a = row.anchor;
+      const grid = document.createElement("div");
+      grid.className = "anchor-grid";
+
+      const refCell = makeCell(a.reference);
+      refCell.classList.add("anchor-ref");
+      grid.appendChild(refCell);
+
+      const oursCell = makeCell({ ...a.ours, ours: true });
+      oursCell.classList.add("anchor-ours");
+      grid.appendChild(oursCell);
+
+      const divider = document.createElement("div");
+      divider.className = "anchor-divider";
+      grid.appendChild(divider);
+
+      a.baselines.forEach((item, i) => {
+        const cell = makeCell(item);
+        cell.style.setProperty("--c", 3 + (i % 4));
+        cell.style.setProperty("--r", 1 + Math.floor(i / 4));
+        cell.classList.add("anchor-baseline");
+        grid.appendChild(cell);
+      });
+      rowEl.appendChild(grid);
     } else if (row.pairs) {
       // Fixed 6-column grid: reference row on top, CMC (Ours) row below with
       // a small per-column prompt caption directly under each "ours" video.
