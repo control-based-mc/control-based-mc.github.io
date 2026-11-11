@@ -342,6 +342,36 @@
 <script>
 const SECTIONS = [
   {
+    id: "rebuttal",
+    tag: "Rebuttal",
+    title: "Rebuttal",
+    rows: [
+      {
+        title: "Motion speed",
+        tiers: [
+          [
+            { name: "Reference", items: ["rebuttal/motion_speed/ref.mp4"] },
+            { name: "CMC (Ours)", ours: true, items: ["rebuttal/motion_speed/ours1.mp4", "rebuttal/motion_speed/ours2.mp4", "rebuttal/motion_speed/ours3.mp4", "rebuttal/motion_speed/ours4.mp4"] },
+          ],
+        ]
+      },
+      {
+        title: "Different object",
+        tiers: [
+          [
+            { name: "Reference", items: ["rebuttal/diff_obj/ref.mp4"] },
+            { name: "CMC (Ours)", ours: true, items: ["rebuttal/diff_obj/ours1.mp4", "rebuttal/diff_obj/ours2.mp4"] },
+          ],
+          [
+            { name: "MotionDirector",  items: ["rebuttal/diff_obj/md1.mp4", "rebuttal/diff_obj/md2.mp4"] },
+            { name: "MotionInversion", items: ["rebuttal/diff_obj/mi1.mp4", "rebuttal/diff_obj/mi2.mp4"] },
+            { name: "DeT",             items: ["rebuttal/diff_obj/det1.mp4", "rebuttal/diff_obj/det2.mp4"] },
+          ],
+        ]
+      },
+    ]
+  },
+  {
     id: "overview",
     tag: "Fig. 1",
     title: "Overview",
@@ -540,36 +570,6 @@ const SECTIONS = [
           { prompt: "“A fox walking through a forest”", ref: "appendix/more_results/fox_ref.mp4", ours: "appendix/more_results/fox.mp4" },
           { prompt: "“A subway train approaching station”", ref: "appendix/more_results/subway_ref.mp4", ours: "appendix/more_results/subway.mp4" },
           { prompt: "“A bear looking ahead”", ref: "appendix/more_results/bear_ref.mp4", ours: "appendix/more_results/bear.mp4"},
-        ]
-      },
-    ]
-  },
-  {
-    id: "rebuttal",
-    tag: "Rebuttal",
-    title: "Rebuttal",
-    rows: [
-      {
-        title: "Motion speed",
-        tiers: [
-          [
-            { name: "Reference", items: ["rebuttal/motion_speed/ref.mp4"] },
-            { name: "CMC (Ours)", ours: true, items: ["rebuttal/motion_speed/ours1.mp4", "rebuttal/motion_speed/ours2.mp4", "rebuttal/motion_speed/ours3.mp4", "rebuttal/motion_speed/ours4.mp4"] },
-          ],
-        ]
-      },
-      {
-        title: "Different object",
-        tiers: [
-          [
-            { name: "Reference", items: ["rebuttal/diff_obj/ref.mp4"] },
-            { name: "CMC (Ours)", ours: true, items: ["rebuttal/diff_obj/ours1.mp4", "rebuttal/diff_obj/ours2.mp4"] },
-          ],
-          [
-            { name: "MotionDirector",  items: ["rebuttal/diff_obj/md1.mp4", "rebuttal/diff_obj/md2.mp4"] },
-            { name: "MotionInversion", items: ["rebuttal/diff_obj/mi1.mp4", "rebuttal/diff_obj/mi2.mp4"] },
-            { name: "DeT",             items: ["rebuttal/diff_obj/det1.mp4", "rebuttal/diff_obj/det2.mp4"] },
-          ],
         ]
       },
     ]
