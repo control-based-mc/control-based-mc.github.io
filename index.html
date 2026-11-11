@@ -963,13 +963,54 @@ function initGridVideoSync() {
     pctEl.textContent = Math.round((done / total) * 100) + "%";
   }
 
+  // Native per-video `loop` lets every clip wrap on its own schedule, so
+  // seek latency at each wrap (and clips that finished loading late)
+  // accumulates into visible phase drift. Instead, clips in a row that
+  // share a duration loop as one unit: native loop is off, and the first
+  // of them to reach its end restarts all of them from frame 0 together.
+  // (Grouping by duration keeps e.g. 3 s Gallery pairs from being cut
+  // short by 2 s pairs in the same row.)
+  function initRowLoop(rowVideos) {
+    const lastRestart = new Map();
+    // Seek the whole group to frame 0 first, then start playback in a
+    // single tick once every seek has landed (capped at 250 ms), so
+    // per-video seek latency doesn't turn into a start offset.
+    function restartGroup(group) {
+      const seeks = group.map(v => new Promise(res => {
+        v.pause();
+        if (v.currentTime === 0) return res();
+        v.addEventListener("seeked", res, { once: true });
+        try { v.currentTime = 0; } catch (e) { res(); }
+      }));
+      const cap = new Promise(res => setTimeout(res, 250));
+      Promise.race([Promise.all(seeks), cap]).then(() => {
+        group.forEach(v => v.play().catch(() => {}));
+      });
+    }
+    rowVideos.forEach(v => {
+      v.loop = false;
+      v.addEventListener("ended", () => {
+        const d = v.duration;
+        const key = Math.round(d * 20);
+        const now = performance.now();
+        if (now - (lastRestart.get(key) || 0) < 500) return;
+        lastRestart.set(key, now);
+        restartGroup(rowVideos.filter(u => !isFinite(u.duration) || Math.abs(u.duration - d) < 0.05));
+      });
+    });
+    restartGroup(rowVideos);
+  }
+
   function startAll() {
     if (started) return;
     started = true;
+    const rows = new Map();
     videos.forEach(v => {
-      try { v.currentTime = 0; } catch (e) {}
-      v.play().catch(() => {});
+      const key = v.closest(".row") || v;
+      if (!rows.has(key)) rows.set(key, []);
+      rows.get(key).push(v);
     });
+    rows.forEach(initRowLoop);
     hideOverlay();
   }
 
