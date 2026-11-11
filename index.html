@@ -544,6 +544,36 @@ const SECTIONS = [
       },
     ]
   },
+  {
+    id: "rebuttal",
+    tag: "Rebuttal",
+    title: "Rebuttal",
+    rows: [
+      {
+        title: "Motion speed",
+        tiers: [
+          [
+            { name: "Reference", items: ["rebuttal/motion_speed/ref.mp4"] },
+            { name: "CMC (Ours)", ours: true, items: ["rebuttal/motion_speed/ours1.mp4", "rebuttal/motion_speed/ours2.mp4", "rebuttal/motion_speed/ours3.mp4", "rebuttal/motion_speed/ours4.mp4"] },
+          ],
+        ]
+      },
+      {
+        title: "Different object",
+        tiers: [
+          [
+            { name: "Reference", items: ["rebuttal/diff_obj/ref.mp4"] },
+            { name: "CMC (Ours)", ours: true, items: ["rebuttal/diff_obj/ours1.mp4", "rebuttal/diff_obj/ours2.mp4"] },
+          ],
+          [
+            { name: "MotionDirector",  items: ["rebuttal/diff_obj/md1.mp4", "rebuttal/diff_obj/md2.mp4"] },
+            { name: "MotionInversion", items: ["rebuttal/diff_obj/mi1.mp4", "rebuttal/diff_obj/mi2.mp4"] },
+            { name: "DeT",             items: ["rebuttal/diff_obj/det1.mp4", "rebuttal/diff_obj/det2.mp4"] },
+          ],
+        ]
+      },
+    ]
+  },
 ];
 
 /* ============================================================
