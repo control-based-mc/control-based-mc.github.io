@@ -347,7 +347,18 @@ const SECTIONS = [
     title: "Rebuttal",
     rows: [
       {
-        title: "Motion speed",
+        title: "[cXLC, LY4k] Motion fidelity metric",
+        tiers: [
+          [
+            { name: "Reference",       items: ["rebuttal/mf_div/ref.mp4"] },
+            { name: "MotionDirector",  items: ["rebuttal/mf_div/md.mp4"] },
+            { name: "CMC (Ours)", ours: true, items: ["rebuttal/mf_div/ours.mp4"] },
+            { name: "Unrelated video", items: ["rebuttal/mf_div/unrelated.mp4"] },
+          ],
+        ]
+      },
+      {
+        title: "[cXLC, K4rn] Motion speed",
         tiers: [
           [
             { name: "Reference", items: ["rebuttal/motion_speed/ref.mp4"] },
@@ -356,7 +367,7 @@ const SECTIONS = [
         ]
       },
       {
-        title: "Different object",
+        title: "[cXLC] Different object",
         tiers: [
           [
             { name: "Reference", items: ["rebuttal/diff_obj/ref.mp4"] },
@@ -366,17 +377,6 @@ const SECTIONS = [
             { name: "MotionDirector",  items: ["rebuttal/diff_obj/md1.mp4", "rebuttal/diff_obj/md2.mp4"] },
             { name: "MotionInversion", items: ["rebuttal/diff_obj/mi1.mp4", "rebuttal/diff_obj/mi2.mp4"] },
             { name: "DeT",             items: ["rebuttal/diff_obj/det1.mp4", "rebuttal/diff_obj/det2.mp4"] },
-          ],
-        ]
-      },
-      {
-        title: "Motion fidelity metric",
-        tiers: [
-          [
-            { name: "Reference",       items: ["rebuttal/mf_div/ref.mp4"] },
-            { name: "MotionDirector",  items: ["rebuttal/mf_div/md.mp4"] },
-            { name: "CMC (Ours)", ours: true, items: ["rebuttal/mf_div/ours.mp4"] },
-            { name: "Unrelated video", items: ["rebuttal/mf_div/unrelated.mp4"] },
           ],
         ]
       },
